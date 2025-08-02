@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 产品分析作品集</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        // 配置 Tailwind CSS 自定义主题
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a'
+                        },
+                        gray: {
+                            50: '#f9fafb',
+                            100: '#f3f4f6',
+                            200: '#e5e7eb',
+                            300: '#d1d5db',
+                            400: '#9ca3af',
+                            500: '#6b7280',
+                            600: '#4b5563',
+                            700: '#374151',
+                            800: '#1f2937',
+                            900: '#111827'
+                        }
+                    },
+                    fontFamily: {
+                        'sans': ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif']
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.6s ease-out',
+                        'slide-up': 'slideUp 0.6s ease-out',
+                        'float': 'float 6s ease-in-out infinite'
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        },
+                        slideUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-10px)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* 自定义滚动条样式 */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+        
+        /* 平滑滚动 */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* 渐变背景 */
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .dark .gradient-bg {
+            background: linear-gradient(135deg, #1e3a8a 0%, #312e81 100%);
+        }
+        
+        /* 卡片悬停效果 */
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .dark .card-hover:hover {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* 按钮悬停效果 */
+        .btn-hover {
+            transition: all 0.2s ease-in-out;
+        }
+        
+        .btn-hover:hover {
+            transform: scale(1.02);
+        }
+        
+        /* 进度条动画 */
+        .progress-bar {
+            animation: progress 2s ease-in-out;
+        }
+        
+        @keyframes progress {
+            from { width: 0%; }
+        }
+        
+        /* 文字渐变效果 */
+        .text-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* 视差效果 */
+        .parallax {
+            transform: translateZ(0);
+            transition: transform 0.1s ease-out;
+        }
+        
+        /* 观察者动画 */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .animate-on-scroll.animate-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* 响应式网格 */
+        .responsive-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        @media (max-width: 640px) {
+            .responsive-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans transition-colors duration-300">
+    <!-- 导航栏 -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border-b border-gray-200 dark:border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-robot text-2xl text-primary-600 dark:text-primary-400"></i>
+                    <h1 class="text-xl font-bold text-gradient">AI 产品分析</h1>
+                </div>
+                
+                <!-- 导航菜单 -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#overview" class="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">概览</a>
+                    <a href="#perplexity" class="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Perplexity</a>
+                    <a href="#accunote" class="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Accunote</a>
+                    <a href="#insights" class="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">洞察</a>
+                </div>
+                
+                <!-- 主题切换按钮 -->
+                <button id="theme-toggle" class="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors btn-hover">
+                    <i class="fas fa-sun dark:hidden text-yellow-500"></i>
+                    <i class="fas fa-moon hidden dark:inline text-blue-400"></i>
+                </button>
+                
+                <!-- 移动端菜单按钮 -->
+                <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- 移动端菜单 -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700">
+            <div class="px-4 py-2 space-y-2">
+                <a href="#overview" class="block py-2 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">概览</a>
+                <a href="#perplexity" class="block py-2 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Perplexity</a>
+                <a href="#accunote" class="block py-2 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Accunote</a>
+                <a href="#insights" class="block py-2 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">洞察</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 英雄区域 -->
+    <section id="hero" class="pt-16 pb-20 gradient-bg relative overflow-hidden">
+        <div class="absolute inset-0 bg-black/10"></div>
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+            <div class="text-center animate-fade-in">
+                <div class="inline-flex items-center space-x-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-8">
+                    <i class="fas fa-sparkles text-yellow-300"></i>
+                    <span class="text-white text-sm font-medium">AI 产品深度分析</span>
+                </div>
+                
+                <h1 class="text-4xl md:text-6xl font-bold text-white mb-6 animate-slide-up">
+                    我最喜爱的两款
+                    <br class="hidden sm:block">
+                    <span class="text-yellow-300">AI 产品</span>
+                </h1>
+                
+                <p class="text-xl text-white/90 mb-10 max-w-3xl mx-auto leading-relaxed animate-slide-up" style="animation-delay: 0.2s;">
+                    深度分析 Perplexity AI 检索工具和 Accunote 会议纪要平台，
+                    <br class="hidden sm:block">
+                    探索 AI 产品的核心价值、使用体验与优化方向
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-4 justify-center animate-slide-up" style="animation-delay: 0.4s;">
+                    <a href="#overview" class="inline-flex items-center justify-center px-8 py-3 bg-white text-primary-600 rounded-lg font-semibold hover:bg-gray-100 transition-colors btn-hover">
+                        <i class="fas fa-play-circle mr-2"></i>
+                        开始阅读
+                    </a>
+                    <a href="#insights" class="inline-flex items-center justify-center px-8 py-3 bg-white/20 backdrop-blur-sm text-white rounded-lg font-semibold hover:bg-white/30 transition-colors btn-hover">
+                        <i class="fas fa-lightbulb mr-2"></i>
+                        查看洞察
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 浮动装饰元素 -->
+        <div class="absolute top-20 left-10 w-16 h-16 bg-white/10 rounded-full animate-float"></div>
+        <div class="absolute bottom-20 right-10 w-12 h-12 bg-yellow-300/20 rounded-full animate-float" style="animation-delay: 2s;"></div>
+        <div class="absolute top-1/2 left-1/4 w-8 h-8 bg-white/5 rounded-full animate-float" style="animation-delay: 4s;"></div>
+    </section>
+
+    <!-- 概览部分 -->
+    <section id="overview" class="py-20 bg-white dark:bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 animate-on-scroll">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6 text-gray-900 dark:text-white">产品概览</h2>
+                <p class="text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+                    两款优秀的 AI 产品，分别在信息检索和会议记录领域展现出色的能力
+                </p>
+            </div>
+            
+            <div class="responsive-grid">
+                <!-- Perplexity 卡片 -->
+                <div class="bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl p-8 card-hover animate-on-scroll">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center mr-4">
+                            <i class="fas fa-search text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Perplexity AI</h3>
+                            <p class="text-blue-600 dark:text-blue-400 font-medium">AI 检索工具</p>
+                        </div>
+                    </div>
+                    
+                    <p class="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
+                        基于 RAG 技术的 AI 问答与信息检索工具，将搜索引擎与大型语言模型相结合，提供具有出处引用的回答。
+                    </p>
+                    
+                    <div class="space-y-3">
+                        <div class="flex items-center text-sm text-gray-600 dark:text-gray-400">
+                            <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                            <span>准确性与可追溯性</span>
+                        </div>
+                        <div class="flex items-center text-sm text-gray-600 dark:text-gray-400">
+                            <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                            <span>权威媒体引用</span>
+                        </div>
+                        <div class="flex items-center text-sm text-gray-600 dark:text-gray-400">
+                            <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                            <span>市场调研报告生成</span>
+                        </div>
+                    </div>
+                    
+                    <a href="#perplexity" class="inline-flex items-center mt-6 text-blue-600 dark:text-blue-400 font-semibold hover:text-blue-700 dark:hover:text-blue-300 transition-colors">
+                        深入了解 <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+                
+                <!-- Accunote 卡片 -->
+                <div class="bg-gradient-to-br from-purple-50 to-pink-100 dark:from-purple-900/20 dark:to-pink-900/20 rounded-2xl p-8 card-hover animate-on-scroll">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-purple-600 rounded-xl flex items-center justify-center mr-4">
+                            <i class="fas fa-microphone text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Accunote</h3>
+                            <p class="text-purple-600 dark:text-purple-400 font-medium">AI 会议纪要平台</p>
+                        </div>
+                    </div>
+                    
+                    <p class="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
+                        专注于自动生成会议纪要的垂直类 AI 工具，通过语音识别与大模型处理，实现语音到结构化纪要的自动转化。
+                    </p>
+                    
+                    <div class="space-y-3">
+                        <div class="flex items-center text-sm text-gray-600 dark:text-gray-400">
+                            <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                            <span>自动结构化纪要</span>
+                        </div>
+                        <div class="flex items-center text-sm text-gray-600 dark:text-gray-400">
+                            <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                            <span>多平台集成</span>
+                        </div>
+                        <div class="flex items-center text-sm text-gray-600 dark:text-gray-400">
+                            <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                            <span>智能内容提炼</span>
+                        </div>
+                    </div>
+                    
+                    <a href="#accunote" class="inline-flex items-center mt-6 text-purple-600 dark:text-purple-400 font-semibold hover:text-purple-700 dark:hover:text-purple-300 transition-colors">
+                        深入了解 <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Perplexity 详细分析 -->
+    <section id="perplexity" class="py-20 bg-gray-50 dark:bg-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 animate-on-scroll">
+                <div class="inline-flex items-center space-x-2 bg-blue-100 dark:bg-blue-900/30 rounded-full px-4 py-2 mb-4">
+                    <i class="fas fa-search text-blue-600 dark:text-blue-400"></i>
+                    <span class="text-blue-600 dark:text-blue-400 text-sm font-medium">AI 检索工具</span>
+                </div>
+                <h2 class="text-3xl md:text-4xl font-bold mb-6 text-gray-900 dark:text-white">Perplexity AI</h2>
+                <p class="text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+                    基于 RAG 技术的下一代搜索体验
+                </p>
+            </div>
+
+            <!-- Aha Moment -->
+            <div class="bg-white dark:bg-gray-900 rounded-2xl p-8 md:p-12 mb-12 card-hover animate-on-scroll">
+                <div class="flex items-start space-x-4 mb-6">
+                    <div class="w-12 h-12 bg-yellow-100 dark:bg-yellow-900/30 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-lightbulb text-yellow-600 dark:text-yellow-400 text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">我的 Aha Moment</h3>
+                        <p class="text-gray-600 dark:text-gray-400">首次使用的惊喜体验</p>
+                    </div>
+                </div>
+                
+                <div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl p-6 border-l-4 border-blue-500">
+                    <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+                        当我第一次提问关于欧洲和美国市场的问题时，Perplexity 不仅提供了答案，还直接列出了来自彭博社、公司官网、外国智库等多家权威媒体的链接，且总结非常精炼准确，我可以一键跳转原文核查细节。这让我意识到：它并不是"替代 Google"，而是把 Google 搜出来的东西真正"读懂"后呈现给我了。
+                    </p>
+                </div>
+                
+                <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="text-center p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                        <i class="fas fa-newspaper text-blue-600 dark:text-blue-400 text-2xl mb-2"></i>
+                        <p class="text-sm font-medium text-gray-900 dark:text-white">权威媒体</p>
+                        <p class="text-xs text-gray-600 dark:text-gray-400">彭博社、智库等</p>
+                    </div>
+                    <div class="text-center p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                        <i class="fas fa-compress-alt text-green-600 dark:text-green-400 text-2xl mb-2"></i>
+                        <p class="text-sm font-medium text-gray-900 dark:text-white">精炼总结</p>
+                        <p class="text-xs text-gray-600 dark:text-gray-400">准确且简洁</p>
+                    </div>
+                    <div class="text-center p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                        <i class="fas fa-external-link-alt text-purple-600 dark:text-purple-400 text-2xl mb-2"></i>
+                        <p class="text-sm font-medium text-gray-900 dark:text-white">原文链接</p>
+                        <p class="text-xs text-gray-600 dark:text-gray-400">一键核查细节</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 问题分析 -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                <!-- 问题列表 -->
+                <div class="bg-white dark:bg-gray-900 rounded-2xl p-8 card-hover animate-on-scroll">
+                    <div class="flex items-center mb-6">
+                        <div class="w-10 h-10 bg-red-100 dark:bg-red-900/30 rounded-lg flex items-center justify-center mr-3">
+                            <i class="fas fa-exclamation-triangle text-red-600 dark:text-red-400"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white">不及预期的功能</h3>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="border-l-4 border-red-200 dark:border-red-800 pl-4">
+                            <h4 class="font-semibold text-gray-900 dark:text-white mb-1">搜索深度</h4>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm">对小语种、冷门内容、墙内内容覆盖较弱</p>
+                        </div>
+                        
+                        <div class="border-l-4 border-red-200 dark:border-red-800 pl-4">
+                            <h4 class="font-semibold text-gray-900 dark:text-white mb-1">对话记忆</h4>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm">长记忆不稳定，容易丢失上下文</p>
+                        </div>
+                        
+                        <div class="border-l-4 border-red-200 dark:border-red-800 pl-4">
+                            <h4 class="font-semibold text-gray-900 dark:text-white mb-1">内容整合</h4>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm">多层逻辑推理时常为拼接而非整合</p>
+                        </div>
+                        
+                        <div class="border-l-4 border-red-200 dark:border-red-800 pl-4">
+                            <h4 class="font-semibold text-gray-900 dark:text-white mb-1">界面交互</h4>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm">无法筛选或调节引用链接权重</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 优化方案 -->
+                <div class="bg-white dark:bg-gray-900 rounded-2xl p-8 card-hover animate-on-scroll">
+                    <div class="flex items-center mb-6">
+                        <div class="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mr-3">
+                            <i class="fas fa-cogs text-green-600 dark:text-green-400"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white">优化解决方案</h3>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="border-l-4 border-green-200 dark:border-green-800 pl-4">
+                            <h4 class="font-semibold text-gray-900 dark:text-white mb-1">本地化插件体系</h4>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm">集成 arXiv CN、知乎、微信公众号索引</p>
+                        </div>
+                        
+                        <div class="border-l-4 border-green-200 dark:border-green-800 pl-4">
+                            <h4 class="font-semibold text-gray-900 dark:text-white mb-1">记忆框架升级</h4>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm">构建搜索链路图谱和分层状态管理</p>
+                        </div>
+                        
+                        <div class="border-l-4 border-green-200 dark:border-green-800 pl-4">
+                            <h4 class="font-semibold text-gray-900 dark:text-white mb-1">结构化模板</h4>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm">多模型协同生成不同风格的回答</p>
+                        </div>
+                        
+                        <div class="border-l-4 border-green-200 dark:border-green-800 pl-4">
+                            <h4 class="font-semibold text-gray-900 dark:text-white mb-1">交互增强</h4>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm">来源权重设置和引用高亮功能</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Accunote 详细分析 -->
+    <section id="accunote" class="py-20 bg-white dark:bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 animate-on-scroll">
+                <div class="inline-flex items-center space-x-2 bg-purple-100 dark:bg-purple-900/30 rounded-full px-4 py-2 mb-4">
+                    <i class="fas fa-microphone text-purple-600 dark:text-purple-400"></i>
+                    <span class="text-purple-600 dark:text-purple-400 text-sm font-medium">AI 会议纪要</span>
+                </div>
+                <h2 class="text-3xl md:text-4xl font-bold mb-6 text-gray-900 dark:text-white">Accunote</h2>
+                <p class="text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+                    专业的会议纪要自动化解决方案
+                </p>
+            </div>
+
+            <!-- Aha Moment -->
+            <div class="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-2xl p-8 md:p-12 mb-12 card-hover animate-on-scroll">
+                <div class="flex items-start space-x-4 mb-6">
+                    <div class="w-12 h-12 bg-yellow-100 dark:bg-yellow-900/30 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-magic text-yellow-600 dark:text-yellow-400 text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">我的 Aha Moment</h3>
+                        <p class="text-gray-600 dark:text-gray-400">震撼的自动化体验</p>
+                    </div>
+                </div>
+                
+                <div class="bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-xl p-6 border border-purple-200 dark:border-purple-800">
+                    <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                        当我上传一段一小时的投资人路演录音时，Accunote 可以自动提炼出对话的层次结构和核心问题，不是机械地记录所有听到的对话，而是自己可以对内容总结精炼，并能较为准确地识别出英文术语。整个过程不到十分钟。
+                    </p>
+                    <div class="inline-flex items-center text-purple-600 dark:text-purple-400 font-medium">
+                        <i class="fas fa-quote-left mr-2"></i>
+                        <span>它不仅是个听写工具，而是真正懂得"会议结构"的智能助理</span>
+                    </div>
+                </div>
+                
+                <div class="mt-8 grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <i class="fas fa-clock text-purple-600 dark:text-purple-400 text-xl"></i>
+                        </div>
+                        <p class="text-sm font-medium text-gray-900 dark:text-white">1小时录音</p>
+                        <p class="text-xs text-gray-600 dark:text-gray-400">投资人路演</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <i class="fas fa-sitemap text-green-600 dark:text-green-400 text-xl"></i>
+                        </div>
+                        <p class="text-sm font-medium text-gray-900 dark:text-white">层次结构</p>
+                        <p class="text-xs text-gray-600 dark:text-gray-400">自动提炼</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <i class="fas fa-language text-blue-600 dark:text-blue-400 text-xl"></i>
+                        </div>
+                        <p class="text-sm font-medium text-gray-900 dark:text-white">术语识别</p>
+                        <p class="text-xs text-gray-600 dark:text-gray-400">英文准确</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-orange-100 dark:bg-orange-900/30 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <i class="fas fa-tachometer-alt text-orange-600 dark:text-orange-400 text-xl"></i>
+                        </div>
+                        <p class="text-sm font-medium text-gray-900 dark:text-white">10分钟内</p>
+                        <p class="text-xs text-gray-600 dark:text-gray-400">完成处理</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 问题与解决方案 -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="space-y-6 animate-on-scroll">
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">存在问题</h3>
+                    
+                    <div class="bg-red-50 dark:bg-red-900/20 rounded-xl p-6 border border-red-200 dark:border-red-800">
+                        <div class="flex items-start space-x-3">
+                            <i class="fas fa-users text-red-600 dark:text-red-400 mt-1"></i>
+                            <div>
+                                <h4 class="font-semibold text-gray-900 dark:text-white mb-2">多说话人分离</h4>
+                                <p class="text-gray-700 dark:text-gray-300 text-sm">在多人同时插话或语音重叠时，容易混淆发言人标签</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-orange-50 dark:bg-orange-900/20 rounded-xl p-6 border border-orange-200 dark:border-orange-800">
+                        <div class="flex items-start space-x-3">
+                            <i class="fas fa-language text-orange-600 dark:text-orange-400 mt-1"></i>
+                            <div>
+                                <h4 class="font-semibold text-gray-900 dark:text-white mb-2">中文支持不足</h4>
+                                <p class="text-gray-700 dark:text-gray-300 text-sm">中文会议摘要准确性明显弱于英文</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-yellow-50 dark:bg-yellow-900/20 rounded-xl p-6 border border-yellow-200 dark:border-yellow-800">
+                        <div class="flex items-start space-x-3">
+                            <i class="fas fa-cog text-yellow-600 dark:text-yellow-400 mt-1"></i>
+                            <div>
+                                <h4 class="font-semibold text-gray-900 dark:text-white mb-2">格式固定</h4>
+                                <p class="text-gray-700 dark:text-gray-300 text-sm">缺乏自由定制的模板功能</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-purple-50 dark:bg-purple-900/20 rounded-xl p-6 border border-purple-200 dark:border-purple-800">
+                        <div class="flex items-start space-x-3">
+                            <i class="fas fa-shield-alt text-purple-600 dark:text-purple-400 mt-1"></i>
+                            <div>
+                                <h4 class="font-semibold text-gray-900 dark:text-white mb-2">隐私处理</h4>
+                                <p class="text-gray-700 dark:text-gray-300 text-sm">数据默认云端保存，隐私保护需要加强</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="space-y-6 animate-on-scroll">
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">优化方案</h3>
+                    
+                    <div class="bg-green-50 dark:bg-green-900/20 rounded-xl p-6 border border-green-200 dark:border-green-800">
+                        <div class="flex items-start space-x-3">
+                            <i class="fas fa-user-check text-green-600 dark:text-green-400 mt-1"></i>
+                            <div>
+                                <h4 class="font-semibold text-gray-900 dark:text-white mb-2">说话人校准系统</h4>
+                                <p class="text-gray-700 dark:text-gray-300 text-sm">用户主动标记 + VAD 语音活动检测算法升级</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-6 border border-blue-200 dark:border-blue-800">
+                        <div class="flex items-start space-x-3">
+                            <i class="fas fa-book text-blue-600 dark:text-blue-400 mt-1"></i>
+                            <div>
+                                <h4 class="font-semibold text-gray-900 dark:text-white mb-2">行业术语包</h4>
+                                <p class="text-gray-700 dark:text-gray-300 text-sm">构建投融资、医药等行业语料库，支持自定义词典</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-6 border border-indigo-200 dark:border-indigo-800">
+                        <div class="flex items-start space-x-3">
+                            <i class="fas fa-palette text-indigo-600 dark:text-indigo-400 mt-1"></i>
+                            <div>
+                                <h4 class="font-semibold text-gray-900 dark:text-white mb-2">可视化模板系统</h4>
+                                <p class="text-gray-700 dark:text-gray-300 text-sm">可拖拽式结构模板，支持输出为多种格式</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
+                        <div class="flex items-start space-x-3">
+                            <i class="fas fa-server text-gray-600 dark:text-gray-400 mt-1"></i>
+                            <div>
+                                <h4 class="font-semibold text-gray-900 dark:text-white mb-2">企业级部署</h4>
+                                <p class="text-gray-700 dark:text-gray-300 text-sm">Docker 本地部署 + "不留痕模式"选项</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 洞察总结 -->
+    <section id="insights" class="py-20 bg-gray-50 dark:bg-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 animate-on-scroll">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6 text-gray-900 dark:text-white">产品洞察</h2>
+                <p class="text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+                    从两款 AI 产品的深度分析中得出的关键洞察与思考
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- 洞察卡片 1 -->
+                <div class="bg-white dark:bg-gray-900 rounded-2xl p-8 card-hover animate-on-scroll">
+                    <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center mb-6">
+                        <i class="fas fa-brain text-blue-600 dark:text-blue-400 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">RAG 技术价值</h3>
+                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+                        Perplexity 证明了 RAG 技术在提升信息准确性和可追溯性方面的巨大价值，它不是简单的搜索替代，而是真正的认知增强工具。
+                    </p>
+                </div>
+                
+                <!-- 洞察卡片 2 -->
+                <div class="bg-white dark:bg-gray-900 rounded-2xl p-8 card-hover animate-on-scroll">
+                    <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-xl flex items-center justify-center mb-6">
+                        <i class="fas fa-microphone-alt text-purple-600 dark:text-purple-400 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">垂直场景深度</h3>
+                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+                        Accunote 展现了 AI 在垂直场景的深度应用潜力，专注单一领域往往能带来更好的用户体验和产品价值。
+                    </p>
+                </div>
+                
+                <!-- 洞察卡片 3 -->
+                <div class="bg-white dark:bg-gray-900 rounded-2xl p-8 card-hover animate-on-scroll">
+                    <div class="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-xl flex items-center justify-center mb-6">
+                        <i class="fas fa-users text-green-600 dark:text-green-400 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">用户参与设计</h3>
+                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+                        两款产品都在交互设计上有改进空间，让用户更多参与到 AI 的决策过程中，可以显著提升使用体验。
+                    </p>
+                </div>
+                
+                <!-- 洞察卡片 4 -->
+                <div class="bg-white dark:bg-gray-900 rounded-2xl p-8 card-hover animate-on-scroll">
+                    <div class="w-12 h-12 bg-yellow-100 dark:bg-yellow-900/30 rounded-xl flex items-center justify-center mb-6">
+                        <i class="fas fa-globe text-yellow-600 dark:text-yellow-400 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">本地化挑战</h3>
+                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+                        中文等非英语语言的支持仍然是 AI 产品面临的重要挑战，本地化不仅是翻译，更是文化理解。
+                    </p>
+                </div>
+                
+                <!-- 洞察卡片 5 -->
+                <div class="bg-white dark:bg-gray-900 rounded-2xl p-8 card-hover animate-on-scroll">
+                    <div class="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-xl flex items-center justify-center mb-6">
+                        <i class="fas fa-shield-alt text-red-600 dark:text-red-400 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">隐私与安全</h3>
+                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+                        企业级 AI 应用必须重视数据隐私和安全，提供本地化部署选项和透明的数据处理政策至关重要。
+                    </p>
+                </div>
+                
+                <!-- 洞察卡片 6 -->
+                <div class="bg-white dark:bg-gray-900 rounded-2xl p-8 card-hover animate-on-scroll">
+                    <div class="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/30 rounded-xl flex items-center justify-center mb-6">
+                        <i class="fas fa-rocket text-indigo-600 dark:text-indigo-400 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">产品迭代思维</h3>
+                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+                        优秀的 AI 产品需要基于用户反馈持续优化，从产品定位、核心体验到用户粘性的全方位思考。
+                    </p>
+                </div>
+            </div>
+            
+            <!-- 总结 -->
+            <div class="mt-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 md:p-12 text-white animate-on-scroll">
+                <div class="text-center">
+                    <i class="fas fa-quote-left text-3xl mb-6 opacity-50"></i>
+                    <blockquote class="text-xl md:text-2xl font-medium leading-relaxed mb-6">
+                        AI 产品的成功不仅在于技术的先进性，更在于对用户需求的深度理解和持续的产品优化
+                    </blockquote>
+                    <p class="text-blue-100">— 基于 Perplexity 与 Accunote 的产品分析</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center space-x-2 mb-4 md:mb-0">
+                    <i class="fas fa-robot text-2xl text-primary-600 dark:text-primary-400"></i>
+                    <span class="text-xl font-bold text-gradient">AI 产品分析作品集</span>
+                </div>
+                
+                <div class="flex items-center space-x-6 text-gray-600 dark:text-gray-400">
+                    <span class="text-sm">© 2024 AI 产品深度分析</span>
+                    <div class="flex space-x-4">
+                        <button class="hover:text-primary-600 dark:hover:text-primary-400 transition-colors" onclick="scrollToTop()">
+                            <i class="fas fa-arrow-up"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 返回顶部按钮 -->
+    <button id="back-to-top" class="fixed bottom-8 right-8 w-12 h-12 bg-primary-600 hover:bg-primary-700 text-white rounded-full shadow-lg opacity-0 invisible transition-all duration-300 z-50 btn-hover">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // 主题切换功能
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+        
+        // 检查本地存储或系统偏好
+        const savedTheme = localStorage.getItem('theme');
+        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        if (savedTheme || (!savedTheme && systemPrefersDark)) {
+            html.classList.add('dark');
+        }
+        
+        themeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+        });
+
+        // 移动端菜单切换
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // 平滑滚动导航
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    // 关闭移动端菜单
+                    mobileMenu.classList.add('hidden');
+                }
+            });
+        });
+
+        // 滚动动画观察器
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-in');
+                }
+            });
+        }, observerOptions);
+
+        // 观察所有动画元素
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+            observer.observe(el);
+        });
+
+        // 返回顶部按钮
+        const backToTopBtn = document.getElementById('back-to-top');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopBtn.classList.remove('opacity-0', 'invisible');
+                backToTopBtn.classList.add('opacity-100', 'visible');
+            } else {
+                backToTopBtn.classList.add('opacity-0', 'invisible');
+                backToTopBtn.classList.remove('opacity-100', 'visible');
+            }
+        });
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        backToTopBtn.addEventListener('click', scrollToTop);
+
+        // 视差效果
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallaxElements = document.querySelectorAll('.parallax');
+            
+            parallaxElements.forEach(element => {
+                const speed = 0.5;
+                element.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+        });
+
+        // 进度指示器
+        function updateProgressBar() {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            
+            // 如果有进度条元素，更新它
+            const progressBar = document.querySelector('.progress-bar');
+            if (progressBar) {
+                progressBar.style.width = scrolled + '%';
+            }
+        }
+
+        window.addEventListener('scroll', updateProgressBar);
+
+        // 鼠标跟随效果（可选）
+        document.addEventListener('mousemove', (e) => {
+            const cursor = document.querySelector('.cursor');
+            if (cursor) {
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+            }
+        });
+
+        // 懒加载图片（如果有的话）
+        if ('IntersectionObserver' in window) {
+            const imageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src;
+                        img.classList.remove('lazy');
+                        imageObserver.unobserve(img);
+                    }
+                });
+            });
+
+            document.querySelectorAll('img[data-src]').forEach(img => {
+                imageObserver.observe(img);
+            });
+        }
+
+        // 性能优化：防抖滚动事件
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // 应用防抖到滚动事件
+        window.addEventListener('scroll', debounce(() => {
+            updateProgressBar();
+        }, 10));
+
+        // 页面加载完成后的初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            // 添加页面加载动画
+            document.body.classList.add('loaded');
+            
+            // 初始化所有组件
+            updateProgressBar();
+            
+            // 预加载关键资源
+            const preloadLinks = document.querySelectorAll('link[rel="preload"]');
+            preloadLinks.forEach(link => {
+                const as = link.getAttribute('as');
+                if (as === 'image') {
+                    const img = new Image();
+                    img.src = link.href;
+                }
+            });
+        });
+
+        // 错误处理
+        window.addEventListener('error', (e) => {
+            console.warn('页面错误:', e.message);
+        });
+
+        // 网络状态监测
+        window.addEventListener('online', () => {
+            console.log('网络连接已恢复');
+        });
+
+        window.addEventListener('offline', () => {
+            console.log('网络连接已断开');
+        });
+    </script>
+</body>
+</html>
